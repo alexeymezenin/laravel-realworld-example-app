@@ -1,4 +1,3 @@
-*.sqlite*
 .DS_Store
 /vendor
 /.idea
