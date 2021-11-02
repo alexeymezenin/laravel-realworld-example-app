@@ -1,4 +1,4 @@
-###Laravel implementation of RealWorld app
+### Laravel implementation of RealWorld app
 
 This Laravel app is part of the [RealWorld](https://github.com/gothinkster/realworld) project and implementation of the [Laravel best practices](https://github.com/alexeymezenin/laravel-best-practices).
 
