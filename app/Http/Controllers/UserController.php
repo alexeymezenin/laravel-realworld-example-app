@@ -24,7 +24,7 @@ class UserController extends Controller
 
     public function store(StoreRequest $request): array
     {
-        $user = $this->user->register($request->validated()['user']);
+        $user = $this->user->create($request->validated()['user']);
 
         auth()->login($user);
 
