@@ -43,20 +43,21 @@ class Article extends Model
 
     public function getFiltered(array $filters): Collection
     {
-        return $this->when(array_key_exists('tag', $filters), function ($q) use ($filters) {
-            $q->whereRelation('tags', 'name', $filters['tag']);
-        })
-        ->when(array_key_exists('author', $filters), function ($q) use ($filters) {
-            $q->whereRelation('user', 'username', $filters['author']);
-        })
-        ->when(array_key_exists('favorited', $filters), function ($q) use ($filters) {
-            $q->whereRelation('users', 'username', $filters['favorited']);
-        })
-        ->when(array_key_exists('offset', $filters), function ($q) use ($filters) {
-            $q->offset($filters['offset'])->limit($filters['limit']);
-        })
-        ->with('user', 'users', 'tags', 'user.followers')
-        ->get();
+        return $this->filter($filters, 'tag', 'tags', 'name')
+            ->filter($filters, 'author', 'user', 'username')
+            ->filter($filters, 'favorited', 'users', 'username')
+            ->when(array_key_exists('offset', $filters), function ($q) use ($filters) {
+                $q->offset($filters['offset'])->limit($filters['limit']);
+            })
+            ->with('user', 'users', 'tags', 'user.followers')
+            ->get();
+    }
+
+    public function scopeFilter($query, array $filters, string $key, string $relation, string $column)
+    {
+        return $query->when(array_key_exists($key, $filters), function ($q) use ($filters, $relation, $column, $key) {
+            $q->whereRelation($relation, $column, $filters[$key]);
+        });
     }
 
     public function setTitleAttribute(string $title): void
