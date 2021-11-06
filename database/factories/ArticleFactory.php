@@ -12,7 +12,7 @@ class ArticleFactory extends Factory
         return [
             'user_id' => User::factory(),
             'title' => $this->faker->sentence,
-            'slug' => $this->faker->slug,
+            'slug' => $this->faker->unique()->slug,
             'description' => $this->faker->text,
             'body' => $this->faker->text
         ];

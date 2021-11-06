@@ -10,6 +10,7 @@ use App\Http\Requests\Article\UpdateRequest;
 use App\Http\Resources\ArticleCollection;
 use App\Http\Resources\ArticleResource;
 use App\Models\Article;
+use App\Models\Filter\Filters\TagNameFilter;
 use App\Models\User;
 use App\Services\ArticleService;
 
@@ -18,6 +19,10 @@ class ArticleController extends Controller
     protected Article $article;
     protected ArticleService $articleService;
     protected User $user;
+
+    private array $filters = [
+        'tag' => TagNameFilter::class
+    ];
 
     public function __construct(Article $article, ArticleService $articleService, User $user)
     {
@@ -28,7 +33,12 @@ class ArticleController extends Controller
 
     public function index(IndexRequest $request): ArticleCollection
     {
-        return new ArticleCollection($this->article->getFiltered($request->validated()));
+        $article = $this->article
+            ->requestFilter($request->validated(), $this->filters)
+            ->get()
+        ;
+
+        return new ArticleCollection($article);
     }
 
     public function feed(FeedRequest $request): ArticleCollection

@@ -16,8 +16,8 @@ Route::prefix('users')->group(function () {
     Route::post('login', [UserController::class, 'login']);
 });
 
-Route::prefix('articles')->group(function () {
-    Route::get('/', [ArticleController::class, 'index']);
+Route::prefix('articles')->as('api:articles:')->group(function () {
+    Route::get('/', [ArticleController::class, 'index'])->name('index');
     Route::get('feed', [ArticleController::class, 'feed']);
     Route::get('{article}', [ArticleController::class, 'show']);
 });

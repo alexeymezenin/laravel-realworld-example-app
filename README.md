@@ -1,3 +1,29 @@
+### use
+
+```php
+namespace App\Http\Controllers;
+
+class ArticleController extends Controller
+{
+    private array $filters = [
+        'tag' => TagNameFilter::class,
+        // ...
+    ];
+
+    public function index(IndexRequest $request): ArticleCollection
+    {
+        $article = Article::requestFilter($request->validated(), $this->filters)->get();
+
+        return new ArticleCollection($article);
+    }
+}
+```
+
+### tests
+```
+phpunit --filter ArticleFilterTest
+```
+
 ### Laravel implementation of RealWorld app
 
 This Laravel app is part of the [RealWorld](https://github.com/gothinkster/realworld) project and implementation of the [Laravel best practices](https://github.com/alexeymezenin/laravel-best-practices).
