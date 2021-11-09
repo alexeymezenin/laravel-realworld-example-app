@@ -18,8 +18,8 @@ cd laravel-realworld-example-app
 Install the app
 
 ```
- composer install
- cp .env.example .env
+composer install
+cp .env.example .env
 ```
 
 Run the web server
