@@ -19,7 +19,7 @@ class UserController extends Controller
 
     public function show(): array
     {
-        return $this->userResource(auth()->getToken()->get());
+        return $this->userResponse(auth()->getToken()->get());
     }
 
     public function store(StoreRequest $request): array
@@ -28,14 +28,14 @@ class UserController extends Controller
 
         auth()->login($user);
 
-        return $this->userResource(auth()->refresh());
+        return $this->userResponse(auth()->refresh());
     }
 
     public function update(UpdateRequest $request): array
     {
         auth()->user()->update($request->validated()['user']);
 
-        return $this->userResource(auth()->getToken()->get());
+        return $this->userResponse(auth()->getToken()->get());
     }
 
     public function login(LoginRequest $request): array
@@ -47,7 +47,7 @@ class UserController extends Controller
         abort(Response::HTTP_FORBIDDEN);
     }
 
-    protected function userResource(string $jwtToken): array
+    protected function userResponse(string $jwtToken): array
     {
         return ['user' => ['token' => $jwtToken] + auth()->user()->toArray()];
     }
