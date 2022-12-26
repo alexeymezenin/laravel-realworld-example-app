@@ -45,7 +45,7 @@ class ArticleController extends Controller
     {
         $article = auth()->user()->articles()->create($request->validated()['article']);
 
-        $this->articleService->syncTags($article, $request->validated()['article']['tagList'] ?? []);
+        $this->syncTags($article);
 
         return $this->articleResponse($article);
     }
@@ -54,7 +54,7 @@ class ArticleController extends Controller
     {
         $article->update($request->validated()['article']);
 
-        $this->articleService->syncTags($article, $request->validated()['article']['tagList'] ?? []);
+        $this->syncTags($article);
 
         return $this->articleResponse($article);
     }
@@ -76,6 +76,11 @@ class ArticleController extends Controller
         $article->users()->detach(auth()->id());
 
         return $this->articleResponse($article);
+    }
+    
+    protected function syncTags(Article $article): void
+    {
+        $this->articleService->syncTags($article, $this->request->validated()['article']['tagList'] ?? []);
     }
 
     protected function articleResponse(Article $article): ArticleResource
