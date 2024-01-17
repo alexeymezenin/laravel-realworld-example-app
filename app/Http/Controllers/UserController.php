@@ -41,7 +41,7 @@ class UserController extends Controller
     public function login(LoginRequest $request): array
     {
         if ($token = auth()->attempt($request->validated()['user'])) {
-            return $this->userResource($token);
+            return $this->userResponse($token);
         }
 
         abort(Response::HTTP_FORBIDDEN);
