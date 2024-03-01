@@ -12,6 +12,7 @@ use App\Http\Resources\ArticleResource;
 use App\Models\Article;
 use App\Models\User;
 use App\Services\ArticleService;
+use Illuminate\Foundation\Http\FormRequest;
 
 class ArticleController extends Controller
 {
@@ -45,7 +46,7 @@ class ArticleController extends Controller
     {
         $article = auth()->user()->articles()->create($request->validated()['article']);
 
-        $this->syncTags($article);
+        $this->syncTags($article, $request);
 
         return $this->articleResponse($article);
     }
@@ -54,7 +55,7 @@ class ArticleController extends Controller
     {
         $article->update($request->validated()['article']);
 
-        $this->syncTags($article);
+        $this->syncTags($article, $request);
 
         return $this->articleResponse($article);
     }
@@ -77,10 +78,10 @@ class ArticleController extends Controller
 
         return $this->articleResponse($article);
     }
-    
-    protected function syncTags(Article $article): void
+
+    protected function syncTags(Article $article, FormRequest $request): void
     {
-        $this->articleService->syncTags($article, $this->request->validated()['article']['tagList'] ?? []);
+        $this->articleService->syncTags($article, $request->validated()['article']['tagList'] ?? []);
     }
 
     protected function articleResponse(Article $article): ArticleResource
