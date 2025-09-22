@@ -6,6 +6,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\ArticleRevisionController;
 
 Route::get('profiles/{user}', [ProfileController::class, 'show']);
 Route::get('tags', [TagController::class, 'index']);
@@ -45,4 +46,13 @@ Route::middleware('auth')->group(function () {
         Route::post('{article}/comments', [CommentController::class, 'store']);
         Route::delete('{article}/comments/{comment}', [CommentController::class, 'destroy']);
     });
+
+   Route::prefix('articles/{article}/revisions')->group(function () {
+     Route::get('/', [ArticleRevisionController::class, 'index']);
+     Route::get('{revision}', [ArticleRevisionController::class, 'show']);
+     Route::post('{revision}/revert', [ArticleRevisionController::class, 'revert']);
+  });
+
+
+
 });

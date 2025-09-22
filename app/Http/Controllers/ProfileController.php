@@ -32,9 +32,23 @@ class ProfileController extends Controller
         return $this->profileResponse($user);
     }
 
-    protected function profileResponse(User $user): array
-    {
-        return ['profile' => $user->only('username', 'bio', 'image')
-            + ['following' => $this->user->doesUserFollowAnotherUser(auth()->id(), $user->id)]];
+protected function profileResponse(User $user): array
+{
+    
+    $currentUserId = auth()->id();
+
+  
+    $following = false;
+    if ($currentUserId !== null) {
+        $following = $this->user->doesUserFollowAnotherUser($currentUserId, $user->id);
     }
+
+    return [
+        'profile' => $user->only('username', 'bio', 'image') + [
+            'following' => $following
+        ]
+    ];
+}
+
+
 }

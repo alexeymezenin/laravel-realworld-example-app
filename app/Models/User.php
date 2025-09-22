@@ -6,13 +6,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Tymon\JWTAuth\Contracts\JWTSubject;
+use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
+
 
 class User extends Authenticatable implements JWTSubject
 {
     use HasFactory;
 
-    protected $fillable = ['username', 'email', 'password', 'bio', 'images'];
+    protected $casts = [
+    'is_admin' => 'boolean',
+    ];
+
+
+    protected $fillable = ['username', 'email', 'password', 'bio', 'images','is_admin'];
 
     protected $visible = ['username', 'email', 'bio', 'images'];
 
@@ -42,7 +48,7 @@ class User extends Authenticatable implements JWTSubject
     }
 
     public function doesUserFollowAnotherUser(int $followerId, int $followingId): bool
-    {
+    {  
         return $this->where('id', $followerId)->whereRelation('following', 'id', $followingId)->exists();
     }
 
