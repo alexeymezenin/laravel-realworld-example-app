@@ -1,0 +1,19 @@
+{
+    "packages": [
+        "php@8.2.29",
+        "php82Extensions.intl",
+        "php82Extensions.apcu",
+        "fswatch@latest",
+        "php82Extensions.xdebug@latest"
+    ],
+    "shell": {
+        "scripts": {
+            "composer-install": [
+                "composer install"
+            ],
+            "pre-merge": [
+                "./run pre-merge"
+            ]
+        }
+    }
+}
